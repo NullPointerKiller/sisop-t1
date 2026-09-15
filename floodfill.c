@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "matriz.h"
-
+#include "floodfill.h"
 
 void floodfill(Matriz *matriz, int linha, int coluna) {
     printf("entrou no floodfill\n");
