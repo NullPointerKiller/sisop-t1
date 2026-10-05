@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "matriz.h"
+#include "floodfill.h"
 
 
 void floodfill(Matriz *matriz, int linha, int coluna) {
-    printf("entrou no floodfill\n");
+    // printf("entrou no floodfill\n");
     
     if (linha < 0 || coluna < 0 || linha >= matriz->linhas || coluna >= matriz->colunas) {
         return;
@@ -30,7 +31,7 @@ void floodfill(Matriz *matriz, int linha, int coluna) {
 }
 
 int contador(Matriz *matriz) {
-    printf("entrou no contador\n");
+    // printf("entrou no contador\n");
     int cont = 0;
 
     for(int i = 0; i < matriz->linhas; i++){
@@ -42,4 +43,4 @@ int contador(Matriz *matriz) {
         }
     }
     return cont;
-}
+}
