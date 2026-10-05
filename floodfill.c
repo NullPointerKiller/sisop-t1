@@ -3,7 +3,7 @@
 #include "floodfill.h"
 
 void floodfill(Matriz *matriz, int linha, int coluna) {
-    printf("entrou no floodfill\n");
+    // printf("entrou no floodfill\n");
     
     if (linha < 0 || coluna < 0 || linha >= matriz->linhas || coluna >= matriz->colunas) {
         return;
@@ -29,7 +29,7 @@ void floodfill(Matriz *matriz, int linha, int coluna) {
 }
 
 int contador(Matriz *matriz) {
-    printf("entrou no contador\n");
+    // printf("entrou no contador\n");
     int cont = 0;
 
     for(int i = 0; i < matriz->linhas; i++){
@@ -42,3 +42,31 @@ int contador(Matriz *matriz) {
     }
     return cont;
 }
+
+//floodfill usado pelos workers: so anda dentro da faixa [inicio, final) do worker
+//e em vez de zerar marca a celula com o rotulo do objeto (rotulo >= 2, pra nao confundir com 0 e 1)
+//assim cada thread so mexe nas suas linhas e no final da pra juntar objetos que cruzam faixas
+void floodfillFaixa(Matriz *matriz, int linha, int coluna, int inicio, int final, int rotulo) {
+
+    if (linha < inicio || coluna < 0 || linha >= final || coluna >= matriz->colunas) {
+        return;
+    }
+
+    //se nao fizer parte do objeto ou ja tiver sido visitado, volta
+    if(matriz->dados[linha][coluna] != 1){
+        return;
+    }
+
+    //marca visitado com o rotulo
+    matriz->dados[linha][coluna] = rotulo;
+
+    // Chama recursivo os vizinhos
+    floodfillFaixa(matriz, linha, coluna - 1, inicio, final, rotulo); // Esquerda
+    floodfillFaixa(matriz, linha + 1, coluna - 1, inicio, final, rotulo); // Diagonal esquerda baixo
+    floodfillFaixa(matriz, linha + 1, coluna, inicio, final, rotulo); // Baixo
+    floodfillFaixa(matriz, linha + 1, coluna + 1, inicio, final, rotulo); // Diagonal direita baixo
+    floodfillFaixa(matriz, linha, coluna + 1, inicio, final, rotulo); // Direita
+    floodfillFaixa(matriz, linha - 1, coluna + 1, inicio, final, rotulo); // Diagonal direita cima
+    floodfillFaixa(matriz, linha - 1, coluna, inicio, final, rotulo); // Cima
+    floodfillFaixa(matriz, linha - 1, coluna - 1, inicio, final, rotulo); // Diagonal esquerda cima
+}
