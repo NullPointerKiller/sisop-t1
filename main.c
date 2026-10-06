@@ -1,67 +1,74 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "matriz.h"
+#include <time.h>
+#include "floodfill.h"
+#include "workers.h"
+#include <pthread.h>
 
-// #define row 5
-// #define col 5
+int versaoSequencial(const char *nomeArquivo);
 
-//todo: fazer ler matriz de arquivo
-// int matriz[row][col] = {
-//     {1, 1, 0, 0, 1},
-//     {0, 0, 1, 0, 0},
-//     {0, 0, 0, 0, 1},
-//     {0, 1, 0, 0, 1},
-//     {1, 1, 0, 1, 1}
-// };
-
-void floodfill(Matriz *matriz, int linha, int coluna) {
-    printf("entrou no floodfill\n");
-    
-    if (linha < 0 || coluna < 0 || linha >= matriz->linhas || coluna >= matriz->colunas) {
-        return;
-    }
-    
-    //se nao fizer parte do objeto, volta
-    if(matriz->dados[linha][coluna] == 0){
-        return;
-    }
-    
-    //marca visitado = ignora
-    matriz->dados[linha][coluna] = 0;
-    
-    // Chama recursivo os vizinhos
-    floodfill(matriz, linha, coluna - 1); // Esquerda
-    floodfill(matriz, linha + 1, coluna - 1); // Diagonal esquerda baixo
-    floodfill(matriz, linha + 1, coluna); // Baixo
-    floodfill(matriz, linha + 1, coluna + 1); // Diagonal direita baixo
-    floodfill(matriz, linha, coluna + 1); // Direita
-    floodfill(matriz, linha - 1, coluna + 1); // Diagonal direita cima
-    floodfill(matriz, linha - 1, coluna); // Cima
-    floodfill(matriz, linha - 1, coluna - 1); // Diagonal esquerda cima
+double agora() {
+    struct timespec t;
+    clock_gettime(CLOCK_MONOTONIC, &t);
+    return t.tv_sec + t.tv_nsec / 1e9;
 }
 
-int contador(Matriz *matriz) {
-    printf("entrou no contador\n");
-    int cont = 0;
-
-    for(int i = 0; i < matriz->linhas; i++){
-        for(int j = 0; j < matriz->colunas; j++){
-            if(matriz->dados[i][j] == 1){
-                cont++;
-                floodfill(matriz, i, j);
-            }
-        }
-    }
-    return cont;
-}
-
-
-int main() {
+int main(int argc, char *argv[]) {
 
     //mudar para o nome do arquivo que deseja ler
-    Matriz matriz = lerMatriz("matriz 5x5.txt");
+    //(ou passar por argumento: ./contador "arquivo.txt" numThreads)
+    const char *nomeArquivo = "matriz 500x500.txt";
+    int numThreads = 4;
 
-    int objetos = contador(&matriz);
-    printf("Numero de objetos: %d\n", objetos);
+    if(argc > 1){
+        nomeArquivo = argv[1];
+    }
+    if(argc > 2){
+        numThreads = atoi(argv[2]);
+    }
+
+    Matriz matriz = lerMatriz(nomeArquivo);
+    if(matriz.dados == NULL){
+        return 1;
+    }
+
+    if(numThreads < 1){
+        numThreads = 1;
+    }
+    if(numThreads > matriz.linhas){
+        numThreads = matriz.linhas;
+    }
+
+    Worker workers[numThreads];
+
+    double inicio = agora();
+    int objetos = dividirTrabalho(&matriz, workers, numThreads);
+    double tempoParalelo = agora() - inicio;
+
+    printf("Numero de objetos (paralelo, %d threads): %d (%.6f s)\n", numThreads, objetos, tempoParalelo);
+
+    liberarMatriz(&matriz);
+
+    versaoSequencial(nomeArquivo);
+
     return 0;
+}
+
+
+
+int versaoSequencial(const char *nomeArquivo){
+
+    Matriz matriz = lerMatriz(nomeArquivo);
+    if(matriz.dados == NULL){
+        return 0;
+    }
+
+    double inicio = agora();
+    int objetos = contador(&matriz);
+    double tempoSequencial = agora() - inicio;
+
+    printf("Numero de objetos (sequencial): %d (%.6f s)\n", objetos, tempoSequencial);
+
+    liberarMatriz(&matriz);
+    return objetos;
 }
