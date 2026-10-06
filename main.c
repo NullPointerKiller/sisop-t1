@@ -7,7 +7,6 @@
 
 int versaoSequencial(const char *nomeArquivo);
 
-//tempo atual em segundos, para medir sequencial x paralelo
 double agora() {
     struct timespec t;
     clock_gettime(CLOCK_MONOTONIC, &t);
@@ -18,7 +17,7 @@ int main(int argc, char *argv[]) {
 
     //mudar para o nome do arquivo que deseja ler
     //(ou passar por argumento: ./contador "arquivo.txt" numThreads)
-    const char *nomeArquivo = "matriz 5x5.txt";
+    const char *nomeArquivo = "matriz 500x500.txt";
     int numThreads = 4;
 
     if(argc > 1){
@@ -33,7 +32,6 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    //nao tem como ter mais workers do que linhas
     if(numThreads < 1){
         numThreads = 1;
     }
@@ -43,7 +41,6 @@ int main(int argc, char *argv[]) {
 
     Worker workers[numThreads];
 
-    // inicio/final de cada worker sao definidos dentro do dividirTrabalho
     double inicio = agora();
     int objetos = dividirTrabalho(&matriz, workers, numThreads);
     double tempoParalelo = agora() - inicio;
@@ -52,7 +49,6 @@ int main(int argc, char *argv[]) {
 
     liberarMatriz(&matriz);
 
-    //roda a versao sequencial pra comparar (le o arquivo de novo, pois a matriz foi alterada)
     versaoSequencial(nomeArquivo);
 
     return 0;
@@ -62,7 +58,6 @@ int main(int argc, char *argv[]) {
 
 int versaoSequencial(const char *nomeArquivo){
 
-    //mudar para o nome do arquivo que deseja ler
     Matriz matriz = lerMatriz(nomeArquivo);
     if(matriz.dados == NULL){
         return 0;

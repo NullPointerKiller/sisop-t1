@@ -3,7 +3,6 @@
 #include "matriz.h"
 
 Matriz lerMatriz(const char *nomeArquivo){
-    // printf("entrou no ler matriz\n");
 
     Matriz matriz;
 
@@ -19,7 +18,6 @@ Matriz lerMatriz(const char *nomeArquivo){
         return matriz;
     }
 
-    //primeira linha do arquivo: LINHASxCOLUNAS
     if(fscanf(arquivo, "%dx%d", &matriz.linhas, &matriz.colunas) != 2 || matriz.linhas <= 0 || matriz.colunas <= 0){
         printf("erro: cabecalho invalido (esperado LINHASxCOLUNAS).\n");
 
@@ -39,7 +37,6 @@ Matriz lerMatriz(const char *nomeArquivo){
 
     for(int i = 0; i < matriz.linhas; i++){
         for(int j = 0; j < matriz.colunas; j++){
-            //se faltar valor no arquivo, considera 0
             if(fscanf(arquivo, "%d", &matriz.dados[i][j]) != 1){
                 matriz.dados[i][j] = 0;
             }
@@ -53,9 +50,8 @@ Matriz lerMatriz(const char *nomeArquivo){
 }
 
 void liberarMatriz(Matriz *matriz){
-    // printf("entrou no liberar matriz\n");
     for(int i = 0; i < matriz->linhas; i++){
         free(matriz->dados[i]);
     }
     free(matriz->dados);
-}
+}

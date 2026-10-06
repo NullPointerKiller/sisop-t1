@@ -5,14 +5,13 @@
 
 typedef struct {
     Matriz *matriz;
-    int inicio;     //primeira linha da faixa (inclusiva)
-    int final;      //ultima linha da faixa (exclusiva)
-    int visitado;   //quantidade de objetos encontrados na faixa
+    int inicio;
+    int final;
+    int visitado;
 } Worker;
 
-//divide as linhas entre os workers, roda as threads e retorna o total de objetos
 int dividirTrabalho(Matriz *matriz, Worker *workers, int numThreads);
 
 void *trabalhar(void *arg);
 
-#endif
+#endif

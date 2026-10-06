@@ -3,7 +3,6 @@
 #include <pthread.h>
 #include "workers.h"
 
-//union-find usado para juntar objetos que cruzam a fronteira entre faixas
 static int encontrar(int *pai, int x) {
     while(pai[x] != x){
         pai[x] = pai[pai[x]];
@@ -12,7 +11,6 @@ static int encontrar(int *pai, int x) {
     return x;
 }
 
-//retorna 1 se juntou dois objetos diferentes, 0 se ja eram o mesmo
 static int unir(int *pai, int a, int b) {
     a = encontrar(pai, a);
     b = encontrar(pai, b);
@@ -27,7 +25,6 @@ int dividirTrabalho(Matriz *matriz, Worker *workers, int numThreads) {
 
     pthread_t threads[numThreads];
 
-    //divide as linhas em faixas, as primeiras recebem uma linha a mais se sobrar
     int base = matriz->linhas / numThreads;
     int resto = matriz->linhas % numThreads;
     int linha = 0;
@@ -45,15 +42,12 @@ int dividirTrabalho(Matriz *matriz, Worker *workers, int numThreads) {
         }
     }
 
-    //espera todos terminarem e soma o que cada um achou
     int total = 0;
     for(int i = 0; i<numThreads; i++){
         pthread_join(threads[i], NULL);
         total += workers[i].visitado;
     }
 
-    //juncao: objeto que cruza a fronteira entre duas faixas foi contado mais de uma vez,
-    //entao para cada par de vizinhos na fronteira com rotulos diferentes, junta e desconta
     int tamanho = matriz->linhas * matriz->colunas + 2;
     int *pai = malloc(tamanho * sizeof(int));
     for(int i = 0; i < tamanho; i++){
@@ -61,12 +55,11 @@ int dividirTrabalho(Matriz *matriz, Worker *workers, int numThreads) {
     }
 
     for(int i = 0; i < numThreads - 1; i++){
-        int r = workers[i].final - 1; //ultima linha da faixa i (a proxima e a primeira da faixa i+1)
+        int r = workers[i].final - 1;
         for(int j = 0; j < matriz->colunas; j++){
             if(matriz->dados[r][j] == 0){
                 continue;
             }
-            //vizinhos de baixo: diagonal esquerda, baixo e diagonal direita
             for(int dj = -1; dj <= 1; dj++){
                 int c = j + dj;
                 if(c >= 0 && c < matriz->colunas && matriz->dados[r + 1][c] != 0){
@@ -86,7 +79,7 @@ void *trabalhar(void *arg) {
 
     Worker *worker = (Worker *)arg;
 
-    // printf("worker trabalhando de %d a %d\n", worker->inicio, worker->final);
+    printf("worker trabalhando de %d a %d\n", worker->inicio, worker->final);
 
     for(int i = worker->inicio; i < worker->final; i++) {
 
@@ -94,7 +87,6 @@ void *trabalhar(void *arg) {
 
             if(worker->matriz->dados[i][j] == 1) {
                 worker->visitado++;
-                //rotulo unico entre todos os workers: cada faixa usa um intervalo proprio (sempre >= 2)
                 int rotulo = worker->inicio * worker->matriz->colunas + worker->visitado + 1;
                 floodfillFaixa(worker->matriz, i, j, worker->inicio, worker->final, rotulo);
             }

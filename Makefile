@@ -12,7 +12,7 @@ LDFLAGS = -pthread
 EXEC = contador
 OBJS = main.o matriz.o floodfill.o workers.o
 
-ARQ = matriz 5x5.txt
+ARQ = matriz 500x500.txt
 WORKERS = 4
 
 all: $(EXEC)
