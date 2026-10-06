@@ -8,6 +8,10 @@ REPETICOES=5
 THREADS="1 2 4 8"
 CSV=results/medicoes.csv
 
+# locale C: sem isso o awk usa virgula decimal (pt_BR) e quebra as colunas do CSV
+LC_ALL=C
+export LC_ALL
+
 # matriz grande para desempenho: gerada com semente fixa (nao vai pro git por causa do tamanho)
 GRANDE="tests/grande_2000x2000.txt"
 if [ ! -f "$GRANDE" ]; then
