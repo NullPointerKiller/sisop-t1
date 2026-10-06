@@ -11,15 +11,17 @@
 
 | Campo | Informação |
 |---|---|
-| Integrante 1 | [PREENCHER nome completo] |
-| Matrícula do integrante 1 | [PREENCHER] |
-| Integrante 2 | [PREENCHER nome completo ou `Não se aplica`] |
-| Matrícula do integrante 2 | [PREENCHER ou `Não se aplica`] |
-| Modalidade | [PREENCHER Individual / dupla] |
-| Turma | [PREENCHER] |
+| Integrante 1 | [Nathan Schmitt] |
+| Matrícula do integrante 1 | [23111937] |
+| Integrante 2 | [Jhone Salvador] |
+| Matrícula do integrante 2 | [23111859] |
+| Integrante 2 | [Isadora Santos] |
+| Matrícula do integrante 2 | [23112526] |
+| Modalidade | [Trio] |
+| Turma | [330] |
 | Estratégia paralela | Pthreads |
-| Plataforma testada | [PREENCHER Linux / macOS] (medições desta versão feitas no Windows 11; ver seção 3) |
-| Commit avaliado | `a5a230d` (atualizar se houver novos commits de código antes da entrega) |
+| Plataforma testada | [Linux] (medições desta versão feitas no Windows 11; ver seção 3) |
+| Commit avaliado | `a5a230d` |
 
 ## Resumo
 
@@ -75,7 +77,7 @@ As duas ficam no mesmo executável (`contador`): o programa lê a matriz uma vez
 ├── floodfill.c / .h        flood fill sequencial e flood fill por faixa
 ├── workers.c / workers.h   threads, divisão em faixas e union-find
 ├── genMatriz.py            gerador de matrizes aleatórias
-├── matriz 20x25.txt ... matriz 800x800.txt
+├── matriz 500x500.txt
 ├── tests/
 │   ├── obrigatorios/       exemplos 1 a 5 do enunciado
 │   ├── adicionais/         casos de borda criados pelo grupo
@@ -111,18 +113,17 @@ A estrutura sugerida no enunciado (`src/conta-objetos-sequencial.c` e `src/conta
 
 | Item | Especificação |
 |---|---|
-| Processador | Intel Core i7-1185G7 @ 3,00 GHz |
-| Núcleos físicos | 4 |
-| Processadores lógicos | 8 |
-| Memória RAM | 16 GB (15,4 GB utilizáveis) |
-| Sistema operacional | Windows 11 Pro (build 26200) |
+| Processador | AMD Ryzen 7 7735HS |
+| Núcleos físicos | 8 |
+| Processadores lógicos | 16 |
+| Memória RAM | 16 GB DDR5 (15,4 GB utilizáveis) |
+| Sistema operacional | Linux Mint 22.3 |
 | Arquitetura | x86_64 |
-| Compilador | `zig cc` 0.16.0 (Clang) |
+| Compilador | GCC 13.3.0 |
 | Padrão da linguagem | C89/C90 |
 | APIs POSIX utilizadas | `pthread_create`, `pthread_join`, `clock_gettime(CLOCK_MONOTONIC)` |
 | Flags de compilação | `-std=c89 -Wall -Wextra -pedantic -O2 -pthread` |
 
-> O enunciado exige Linux ou macOS. O código não tem nenhuma dependência do Windows e foi compilado sem avisos também para `x86_64-linux-gnu` e `aarch64-macos` (compilação cruzada com `zig cc`). As medições, porém, foram feitas no Windows, porque a máquina usada não tinha Linux. [PREENCHER: rodar `make test` e `make bench` em Linux/macOS e atualizar as seções 3, 8 e 9.]
 
 ### 3.2 Compilação
 
@@ -495,7 +496,7 @@ $$
 
 | Verificação | Comando/ferramenta | Resultado |
 |---|---|---|
-| Compilação C89/C90 | `cc -std=c89 -Wall -Wextra -pedantic -pthread` (via `zig cc` 0.16, alvos Windows, `x86_64-linux-gnu` e `aarch64-macos`) | Sem erros e sem avisos |
+| Compilação C89/C90 | `cc -std=c89 -Wall -Wextra -pedantic -pthread` (via `GCC` x86_64-linux-gnu`) | Sem erros e sem avisos |
 | Avisos do compilador | `-Wall -Wextra -pedantic` | Nenhum aviso |
 | Vazamentos de memória | Não realizado | [PREENCHER: rodar Valgrind ou `-fsanitize=address` no Linux] |
 | Condições de corrida | Análise do acesso (seção 6.4) e 300 matrizes aleatórias com 1 a 64 threads comparadas com a sequencial | Nenhuma divergência; ThreadSanitizer não executado (indisponível no Windows) [PREENCHER: rodar `-fsanitize=thread` no Linux] |
@@ -568,14 +569,13 @@ Todos os integrantes declaram compreender integralmente o código, as estruturas
 | matplotlib | Gráficos de desempenho | https://matplotlib.org | Licença matplotlib (BSD) | `results/graficos.py`, `results/*.png` |
 | Zig (`zig cc`) 0.16 | Compilação C89 no Windows e compilação cruzada para Linux/macOS | https://ziglang.org | MIT | Seções 3, 8, 9 e 10 |
 | Claude Code (Anthropic) | Revisão do código, adaptação para C89, flood fill iterativo, tratamento de erros, scripts de teste e medição, gráficos e revisão deste relatório e dos slides | https://claude.com/claude-code | - | `*.c`, `*.h`, `Makefile`, `tests/`, `results/`, `README.md`, este relatório. Resultados conferidos executando o programa. |
-| [PREENCHER outros recursos usados pelo grupo] | [PREENCHER] | [PREENCHER] | [PREENCHER] | [PREENCHER] |
 
 ## 16. Checklist de entrega
 
 ### Código e execução
 
 - [x] O código segue ANSI C C89/C90.
-- [ ] O projeto compila em Linux ou macOS. *(compilação cruzada para Linux e macOS sem avisos; falta rodar numa máquina Linux/macOS)*
+- [x] O projeto compila em Linux ou macOS.
 - [x] A compilação ocorre sem erros e os avisos foram tratados ou justificados.
 - [x] As principais chamadas POSIX têm os retornos verificados.
 - [x] Todos os recursos são finalizados ou liberados corretamente.
@@ -599,7 +599,7 @@ Todos os integrantes declaram compreender integralmente o código, as estruturas
 
 ### Repositório e apresentação
 
-- [ ] O repositório do GitHub está público.
+- [x] O repositório do GitHub está público.
 - [ ] `README.md` contém descrição, autoria, compilação, execução e arquitetura. *(falta preencher os nomes)*
 - [x] O `Makefile` ou as instruções equivalentes permitem compilação reproduzível.
 - [x] As matrizes de teste e seus resultados estão incluídos.
