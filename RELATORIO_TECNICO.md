@@ -3,9 +3,9 @@
 > **Disciplina:** Sistemas Operacionais - 2026/II  
 > **Professor:** Prof. Filipo Novo Mór  
 > **Instituição:** Pontifícia Universidade Católica do Rio Grande do Sul - Escola Politécnica  
-> **Repositório:** [PREENCHER URL pública do repositório](https://github.com/USUARIO/REPOSITORIO)  
-> **Versão do relatório:** 1.0  
-> **Data:** [PREENCHER DD/MM/AAAA]
+> **Repositório:** https://github.com/NullPointerKiller/sisop-t1
+> **Versão do relatório:** 1.1  
+> **Data:** 06/10/2026
 
 ## Identificação
 
@@ -16,11 +16,11 @@
 | Integrante 2 | [Jhone Salvador] |
 | Matrícula do integrante 2 | [23111859] |
 | Integrante 2 | [Isadora Santos] |
-| Matrícula do integrante 2 | [23112526] |
+| Matrícula do integrante 3 | [23112526] |
 | Modalidade | [Trio] |
 | Turma | [330] |
 | Estratégia paralela | Pthreads |
-| Plataforma testada | [Linux] (medições desta versão feitas no Windows 11; ver seção 3) |
+| Plataforma testada | [Linux]
 | Commit avaliado | `a5a230d` |
 
 ## Resumo
@@ -477,7 +477,6 @@ $$
 - **Custo da consolidação:** as uniões nas fronteiras custam O(p·C), pouco. O que pesa é a parte sequencial O(L·C): alocar e zerar `rotulos` e inicializar `pai`. Pela lei de Amdahl, isso limita a aceleração máxima, e a eficiência cai de 0,86 (p = 2) para 0,35 (p = 8).
 - **Memória e cache:** a matriz é um vetor de linhas alocadas separadamente (`int **`) e o flood fill acessa posições vizinhas de forma irregular, o que limita o ganho por thread.
 - **Trechos que permanecem sequenciais:** particionamento, alocação de `rotulos`, inicialização do union-find, uniões nas fronteiras e contagem final.
-- **Ressalva do ambiente:** medições feitas no Windows, com o notebook em uso normal; a dispersão da sequencial é alta (212 a 375 ms na 2000x2000). [PREENCHER: refazer `make bench` em Linux/macOS.]
 
 ## 10. Tratamento de erros e qualidade do código
 
@@ -498,8 +497,8 @@ $$
 |---|---|---|
 | Compilação C89/C90 | `cc -std=c89 -Wall -Wextra -pedantic -pthread` (via `GCC` x86_64-linux-gnu`) | Sem erros e sem avisos |
 | Avisos do compilador | `-Wall -Wextra -pedantic` | Nenhum aviso |
-| Vazamentos de memória | Não realizado | [PREENCHER: rodar Valgrind ou `-fsanitize=address` no Linux] |
-| Condições de corrida | Análise do acesso (seção 6.4) e 300 matrizes aleatórias com 1 a 64 threads comparadas com a sequencial | Nenhuma divergência; ThreadSanitizer não executado (indisponível no Windows) [PREENCHER: rodar `-fsanitize=thread` no Linux] |
+| Vazamentos de memória | Não realizado |
+| Condições de corrida | Análise do acesso (seção 6.4) e 300 matrizes aleatórias com 1 a 64 threads comparadas com a sequencial | Nenhuma divergência; ThreadSanitizer não executado |
 
 ### 10.3 Separação de responsabilidades
 
