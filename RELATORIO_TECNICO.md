@@ -25,7 +25,7 @@
 
 ## Resumo
 
-O trabalho conta objetos em uma matriz binária, sendo um objeto um conjunto de células `1` ligadas por conectividade 8. A versão sequencial percorre a matriz e, a cada célula `1` ainda não visitada, incrementa o contador e executa um flood fill iterativo, com pilha explícita e uma matriz de visitados, sem alterar a entrada. A versão paralela, com Pthreads, divide a matriz em faixas contíguas de linhas, uma por thread. Cada thread rotula os objetos da sua faixa em uma matriz de rótulos compartilhada, escrevendo só nas próprias linhas, o que dispensa mutex. Após o `pthread_join`, a thread principal verifica as fronteiras entre faixas, incluindo as diagonais, e une rótulos equivalentes com union-find; o total é a soma das contagens locais menos as uniões efetivas. As cinco matrizes obrigatórias deram 3, 4, 5, 6 e 7 objetos nas duas versões, com 1, 2, 3, 4 e 8 threads, e 300 matrizes aleatórias não tiveram divergência. Em uma matriz 2000x2000, a aceleração foi de 2,55 com 4 threads e 2,81 com 8.
+O trabalho conta objetos em uma matriz binária, sendo um objeto um conjunto de células `1` ligadas por conectividade 8. A versão sequencial percorre a matriz e, a cada célula `1` ainda não visitada, incrementa o contador e executa um flood fill iterativo, com pilha explícita e uma matriz de visitados, sem alterar a entrada. A versão paralela, com Pthreads, divide a matriz em faixas contíguas de linhas, uma por thread. Cada thread rotula os objetos da sua faixa em uma matriz de rótulos compartilhada, escrevendo só nas próprias linhas, o que dispensa mutex. Após o `pthread_join`, a thread principal verifica as fronteiras entre faixas, incluindo as diagonais, e une rótulos equivalentes com union-find; o total é a soma das contagens locais menos as uniões efetivas. As cinco matrizes obrigatórias deram 3, 4, 5, 6 e 7 objetos nas duas versões, com 1, 2, 3, 4 e 8 threads, e 300 matrizes aleatórias não tiveram divergência. Em uma matriz 2000x2000, a aceleração foi de 2,27 com 4 threads e 3,00 com 8.
 
 **Palavras-chave:** sistemas operacionais; paralelismo; processos; threads; conectividade 8; flood fill; componentes conexos.
 
@@ -367,7 +367,7 @@ Contagens locais 3 + 3 = 6; uma união efetiva (`unir(28, 36)`; os outros pares 
 | A4 | 2000 x 2000 | Matriz grande usada no desempenho | 13345 (sequencial) | 1, 2, 4, 8 (5 repetições) | 13345 | Aprovado |
 | A5 | 1 x 30 | Uma única linha (p limitado a 1) | 10 | 1, 2, 3, 4, 8 | 10 | Aprovado |
 | A6 | 10 x 10 | Matriz toda com 1 (um objeto em todas as faixas) | 1 | 1, 2, 3, 4, 8 | 1 | Aprovado |
-| A7 | 20x25 a 800x800 | Matrizes do repositório (`matriz *.txt`) | 1, 21, 334, 911, 2075 | 1, 2, 4, 8 | iguais | Aprovado |
+| A7 | 500 x 500 | Matriz do repositório (`matriz 500x500.txt`) | 911 | 1, 2, 4, 8 (5 repetições) | 911 | Aprovado |
 | A8 | 1 a 80 | 300 matrizes aleatórias | Sequencial | 1 a 64 threads | 0 divergências | Aprovado |
 
 ### 8.4 Repetibilidade e determinismo
@@ -393,7 +393,7 @@ O resultado não depende da ordem de execução das threads: cada faixa é rotul
 | Repetições por configuração | 5 para a paralela. A sequencial é medida em toda execução: 20 medições por matriz. |
 | Medida representativa | Mediana |
 | Critério para dispersão | Mínimo-máximo |
-| Carga do sistema durante os testes | Notebook em uso normal (sem isolamento de carga) |
+| Carga do sistema durante os testes | Notebook em uso normal (sem isolamento de carga) [CONFERIR com quem rodou o `make bench`] |
 | Flags de otimização | `-O2` |
 
 As medições brutas estão em [`results/medicoes.csv`](results/medicoes.csv) e são geradas por `make bench` ([`tests/medir.sh`](tests/medir.sh)).
@@ -418,36 +418,36 @@ $$
 
 | Versão | Trabalhadores (`p`) | Tempo representativo (ms) | Dispersão (ms) | Aceleração `S(p)` | Eficiência `E(p)` | Resultado correto? |
 |---|---:|---:|---:|---:|---:|---|
-| Sequencial | 1 | 236,30 | 212,51 - 375,00 | 1,00 | 1,00 | Sim |
-| Paralela | 1 | 274,96 | 255,78 - 303,72 | 0,86 | 0,86 | Sim |
-| Paralela | 2 | 136,88 | 134,26 - 188,49 | 1,73 | 0,86 | Sim |
-| Paralela | 4 | 92,57 | 82,16 - 104,05 | 2,55 | 0,64 | Sim |
-| Paralela | 8 | 84,24 | 65,81 - 103,40 | 2,81 | 0,35 | Sim |
+| Sequencial | 1 | 121,83 | 118,81 - 128,86 | 1,00 | 1,00 | Sim |
+| Paralela | 1 | 148,39 | 147,17 - 150,54 | 0,82 | 0,82 | Sim |
+| Paralela | 2 | 83,29 | 82,85 - 89,24 | 1,46 | 0,73 | Sim |
+| Paralela | 4 | 53,72 | 52,45 - 57,57 | 2,27 | 0,57 | Sim |
+| Paralela | 8 | 40,57 | 38,17 - 41,76 | 3,00 | 0,38 | Sim |
 
 **Matriz 500x500 (911 objetos)**
 
 | Versão | Trabalhadores (`p`) | Tempo representativo (ms) | Dispersão (ms) | Aceleração `S(p)` | Eficiência `E(p)` | Resultado correto? |
 |---|---:|---:|---:|---:|---:|---|
-| Sequencial | 1 | 17,56 | 15,30 - 23,73 | 1,00 | 1,00 | Sim |
-| Paralela | 1 | 25,12 | 23,28 - 26,79 | 0,70 | 0,70 | Sim |
-| Paralela | 2 | 17,02 | 13,56 - 17,35 | 1,03 | 0,52 | Sim |
-| Paralela | 4 | 13,31 | 11,62 - 24,91 | 1,32 | 0,33 | Sim |
-| Paralela | 8 | 12,89 | 8,53 - 17,91 | 1,36 | 0,17 | Sim |
+| Sequencial | 1 | 10,30 | 7,13 - 11,46 | 1,00 | 1,00 | Sim |
+| Paralela | 1 | 13,09 | 12,53 - 13,30 | 0,79 | 0,79 | Sim |
+| Paralela | 2 | 7,77 | 7,40 - 8,21 | 1,33 | 0,66 | Sim |
+| Paralela | 4 | 5,20 | 4,90 - 5,72 | 1,98 | 0,50 | Sim |
+| Paralela | 8 | 3,64 | 3,29 - 5,38 | 2,83 | 0,35 | Sim |
 
 ### 9.4 Dados brutos das repetições
 
 | Versão | Trabalhadores | Repetição 1 (ms) | Repetição 2 (ms) | Repetição 3 (ms) | Repetição 4 (ms) | Repetição 5 (ms) | Medida representativa (ms) |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| Sequencial 2000x2000 | 1 | 20 medições no CSV | | | | | 236,30 |
-| Paralela 2000x2000 | 1 | 303,72 | 279,75 | 273,87 | 255,78 | 274,96 | 274,96 |
-| Paralela 2000x2000 | 2 | 188,49 | 134,26 | 136,88 | 136,42 | 137,73 | 136,88 |
-| Paralela 2000x2000 | 4 | 104,05 | 82,81 | 92,84 | 92,57 | 82,16 | 92,57 |
-| Paralela 2000x2000 | 8 | 65,81 | 68,03 | 87,80 | 84,24 | 103,40 | 84,24 |
-| Sequencial 500x500 | 1 | 20 medições no CSV | | | | | 17,56 |
-| Paralela 500x500 | 1 | 26,59 | 26,79 | 23,28 | 24,83 | 25,12 | 25,12 |
-| Paralela 500x500 | 2 | 17,02 | 17,34 | 13,56 | 15,39 | 17,35 | 17,02 |
-| Paralela 500x500 | 4 | 13,31 | 24,91 | 11,62 | 14,93 | 12,08 | 13,31 |
-| Paralela 500x500 | 8 | 17,91 | 12,89 | 8,53 | 9,49 | 13,31 | 12,89 |
+| Sequencial 2000x2000 | 1 | 20 medições no CSV | | | | | 121,83 |
+| Paralela 2000x2000 | 1 | 148,39 | 147,72 | 147,17 | 150,54 | 149,05 | 148,39 |
+| Paralela 2000x2000 | 2 | 89,24 | 83,29 | 83,63 | 82,85 | 83,04 | 83,29 |
+| Paralela 2000x2000 | 4 | 52,45 | 53,97 | 53,72 | 52,90 | 57,57 | 53,72 |
+| Paralela 2000x2000 | 8 | 41,76 | 40,57 | 39,71 | 40,95 | 38,17 | 40,57 |
+| Sequencial 500x500 | 1 | 20 medições no CSV | | | | | 10,30 |
+| Paralela 500x500 | 1 | 13,09 | 12,66 | 12,53 | 13,30 | 13,15 | 13,09 |
+| Paralela 500x500 | 2 | 7,77 | 7,60 | 8,21 | 8,04 | 7,40 | 7,77 |
+| Paralela 500x500 | 4 | 5,20 | 5,31 | 4,90 | 5,72 | 4,92 | 5,20 |
+| Paralela 500x500 | 8 | 3,64 | 5,38 | 3,51 | 3,79 | 3,29 | 3,64 |
 
 ### 9.5 Gráfico de tempo de execução
 
@@ -469,12 +469,12 @@ $$
 
 ### 9.8 Análise dos resultados
 
-- **Ganho em relação à sequencial:** na 2000x2000 a paralela é 1,73x mais rápida com 2 threads e 2,55x com 4. Na 500x500 o ganho é pequeno (1,32 com 4 threads), porque a contagem leva poucos milissegundos.
-- **Efeito da quantidade de threads:** a aceleração cresce bem até 4 threads e quase não melhora de 4 para 8 (2,55 para 2,81). A máquina tem 4 núcleos físicos; com 8 threads, os pares de threads lógicas (hyper-threading) dividem o mesmo núcleo.
-- **Por que `S(1) < 1`:** com 1 thread a paralela faz o mesmo flood fill da sequencial, mas ainda cria a thread, aloca a matriz de rótulos (`int`, 4 bytes por célula, contra 1 byte do `visitado`) e inicializa o vetor `pai` de L·C posições. Essa sobrecarga deixa a paralela 16% mais lenta na 2000x2000 e 43% na 500x500.
+- **Ganho em relação à sequencial:** na 2000x2000 a paralela é 1,46x mais rápida com 2 threads, 2,27x com 4 e 3,00x com 8. Na 500x500 o ganho é parecido (2,83 com 8 threads), mas em valores absolutos são só alguns milissegundos.
+- **Efeito da quantidade de threads:** a aceleração cresce com o número de threads, mas bem abaixo do ideal: de 4 para 8 threads passa de 2,27 para 3,00, embora a máquina tenha 8 núcleos físicos. O limite vem da parte sequencial (abaixo), não da falta de núcleos.
+- **Por que `S(1) < 1`:** com 1 thread a paralela faz o mesmo flood fill da sequencial, mas ainda cria a thread, aloca a matriz de rótulos (`int`, 4 bytes por célula, contra 1 byte do `visitado`) e inicializa o vetor `pai` de L·C posições. Essa sobrecarga deixa a paralela 22% mais lenta na 2000x2000 e 27% na 500x500.
 - **Comunicação, sincronização e contenção:** não há locks; a única sincronização é o `pthread_join`. Não há contenção de escrita porque as faixas são disjuntas.
 - **Granularidade e balanceamento:** a matriz tem densidade uniforme, então faixas do mesmo tamanho têm carga parecida. A divisão estática perderia eficiência em matrizes com densidade irregular.
-- **Custo da consolidação:** as uniões nas fronteiras custam O(p·C), pouco. O que pesa é a parte sequencial O(L·C): alocar e zerar `rotulos` e inicializar `pai`. Pela lei de Amdahl, isso limita a aceleração máxima, e a eficiência cai de 0,86 (p = 2) para 0,35 (p = 8).
+- **Custo da consolidação:** as uniões nas fronteiras custam O(p·C), pouco. O que pesa é a parte sequencial O(L·C): alocar e zerar `rotulos` e inicializar `pai`. Pela lei de Amdahl, isso limita a aceleração máxima, e a eficiência cai de 0,73 (p = 2) para 0,38 (p = 8) na 2000x2000.
 - **Memória e cache:** a matriz é um vetor de linhas alocadas separadamente (`int **`) e o flood fill acessa posições vizinhas de forma irregular, o que limita o ganho por thread.
 - **Trechos que permanecem sequenciais:** particionamento, alocação de `rotulos`, inicialização do union-find, uniões nas fronteiras e contagem final.
 
@@ -519,7 +519,7 @@ Entrada em `matriz.c`; processamento sequencial e flood fill por faixa em `flood
 
 Os objetivos foram alcançados. As duas versões contam corretamente os objetos com conectividade 8: as cinco matrizes obrigatórias deram 3, 4, 5, 6 e 7 nas duas versões com 1, 2, 3, 4 e 8 threads, e não houve divergência em 300 matrizes aleatórias com até 64 threads. Objetos que atravessam faixas, inclusive pela diagonal, são unificados por union-find sem contagem duplicada. A divisão em faixas disjuntas dispensa mutex, o que elimina condições de corrida e deadlocks. O código segue C89 e compila sem avisos com as flags do enunciado.
 
-No desempenho, o paralelismo compensa a partir de matrizes grandes: na 2000x2000, a aceleração foi de 2,55 com 4 threads, próxima do número de núcleos físicos da máquina. Com 8 threads (hyper-threading) o ganho adicional é pequeno, e em matrizes pequenas a criação das threads e a alocação sequencial dos rótulos pesam tanto quanto o trabalho paralelo.
+No desempenho, o paralelismo compensa a partir de matrizes grandes: na 2000x2000, a aceleração foi de 1,46 com 2 threads, 2,27 com 4 e 3,00 com 8. O ganho fica bem abaixo do ideal porque a alocação da matriz de rótulos e a consolidação continuam sequenciais (lei de Amdahl), e em matrizes pequenas a criação das threads pesa tanto quanto o trabalho paralelo.
 
 O principal aprendizado foi que dividir o trabalho é a parte fácil, e o difícil é juntar os resultados: sem a consolidação nas fronteiras a soma local fica errada. Também ficou claro que a recursão, aceitável em matrizes pequenas, não serve para uma thread com pilha limitada. Uma melhoria futura realista é paralelizar a alocação dos rótulos e a consolidação, que hoje limitam a aceleração.
 
@@ -599,7 +599,7 @@ Todos os integrantes declaram compreender integralmente o código, as estruturas
 ### Repositório e apresentação
 
 - [x] O repositório do GitHub está público.
-- [ ] `README.md` contém descrição, autoria, compilação, execução e arquitetura. *(falta preencher os nomes)*
+- [x] `README.md` contém descrição, autoria, compilação, execução e arquitetura.
 - [x] O `Makefile` ou as instruções equivalentes permitem compilação reproduzível.
 - [x] As matrizes de teste e seus resultados estão incluídos.
 - [x] A análise de desempenho está incluída.
@@ -611,15 +611,12 @@ Todos os integrantes declaram compreender integralmente o código, as estruturas
 ## Apêndice A - Registro de comandos
 
 ```bash
-# Informações do ambiente (Windows, PowerShell)
-Get-CimInstance Win32_Processor | Select Name,NumberOfCores,NumberOfLogicalProcessors
-zig version
+# Informações do ambiente (Linux)
+lscpu | grep -E "Model name|^CPU\(s\)|Core\(s\)"
+gcc --version
 
-# Compilação (mesmas flags do Makefile)
-zig cc -std=c89 -Wall -Wextra -pedantic -O2 -pthread -o contador main.c matriz.c floodfill.c workers.c
-zig cc -target x86_64-linux-gnu -std=c89 -Wall -Wextra -pedantic -O2 -pthread -o contador-linux main.c matriz.c floodfill.c workers.c
-zig cc -target aarch64-macos   -std=c89 -Wall -Wextra -pedantic -O2 -pthread -o contador-mac   main.c matriz.c floodfill.c workers.c
-# (no Linux/macOS: make)
+# Compilação
+make clean && make
 
 # Execução dos testes obrigatórios e adicionais
 sh tests/rodar_testes.sh ./contador        # = make test
@@ -635,8 +632,8 @@ O arquivo `results/medicoes.csv` usa o cabeçalho abaixo. Cada execução do `co
 
 ```csv
 matriz,linhas,colunas,versao,trabalhadores,repeticao,tempo_ms,objetos,resultado_correto
-tests/grande_2000x2000.txt,2000,2000,sequencial,1,1-1,222.229,13345,true
-tests/grande_2000x2000.txt,2000,2000,paralela,1,1,303.721,13345,true
+tests/grande_2000x2000.txt,2000,2000,sequencial,1,1-1,120.296,13345,true
+tests/grande_2000x2000.txt,2000,2000,paralela,1,1,148.389,13345,true
 ```
 
 ## Apêndice C - Correspondência com os critérios de avaliação

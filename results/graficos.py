@@ -61,13 +61,13 @@ for arquivo, titulo, rotulo, ideal, limite in [
         ("grafico-eficiencia.png", "Eficiência E(p) = S(p) / p", "Eficiência", lambda p: 1, 1.1)]:
     fig, ax = plt.subplots(figsize=(8, 4.5), dpi=150)
     ax.plot(THREADS, [ideal(p) for p in THREADS], ls="--", color="#999", lw=1.5, label="Ideal")
-    for arq, cor in zip(matrizes, CORES):
+    for k, (arq, cor) in enumerate(zip(matrizes, CORES)):
         tseq = statistics.median(tempos(arq, "sequencial"))
         s = [tseq / statistics.median(tempos(arq, "paralela", p)) for p in THREADS]
         y = s if "acel" in arquivo else [v / p for v, p in zip(s, THREADS)]
         ax.plot(THREADS, y, color=cor, lw=2, marker="o", ms=8, label=nome(arq))
         ax.annotate(f"{y[-1]:.2f}".replace(".", ","), (THREADS[-1], y[-1]),
-                    textcoords="offset points", xytext=(8, -4), color="#333", fontsize=9)
+                    textcoords="offset points", xytext=(8, 4 if k == len(matrizes) - 1 else -12), color="#333", fontsize=9)
     ax.set_xticks(THREADS)
     ax.set_ylim(0, limite)
     eixos(ax, titulo, rotulo)
