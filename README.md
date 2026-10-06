@@ -10,8 +10,9 @@ O programa conta os objetos de uma matriz binária (0 = fundo, 1 = primeiro plan
 
 | Integrante | Matrícula |
 |---|---|
-| [PREENCHER nome completo] | [PREENCHER] |
-| [PREENCHER nome completo] | [PREENCHER] |
+| [Isadora Santos] | [23112526] |
+| [Jhone Salvador] | [23111859] |
+| [Nathan Schmitt] | [23111937] |
 
 Sistemas Operacionais - 2026/II - PUCRS - Prof. Filipo Mór
 

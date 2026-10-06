@@ -15,7 +15,7 @@
 | Matrícula do integrante 1 | [23111937] |
 | Integrante 2 | [Jhone Salvador] |
 | Matrícula do integrante 2 | [23111859] |
-| Integrante 2 | [Isadora Santos] |
+| Integrante 3 | [Isadora Santos] |
 | Matrícula do integrante 3 | [23112526] |
 | Modalidade | [Trio] |
 | Turma | [330] |
