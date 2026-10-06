@@ -1,0 +1,7 @@
+# arquivos gerados na compilacao
+*.o
+contador
+contador.exe
+
+# matriz grande do teste de desempenho (gerada pelo make bench com semente fixa)
+tests/grande_*.txt

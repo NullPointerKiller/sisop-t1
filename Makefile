@@ -3,10 +3,13 @@
 #   make                -> compila
 #   make run            -> compila e roda com a matriz padrao e 4 workers
 #   make run ARQ="x.txt" WORKERS=8
+#   make test           -> roda as matrizes de tests/ com 1, 2, 3, 4 e 8 threads e confere o resultado
+#   make bench          -> mede sequencial x paralelo e grava results/medicoes.csv
 #   make clean          -> apaga os arquivos gerados
 
-CC = gcc
-CFLAGS = -Wall -Wextra -O2
+# mesmas flags do comando de referencia do enunciado (ANSI C89)
+CC = cc
+CFLAGS = -std=c89 -Wall -Wextra -pedantic -O2
 LDFLAGS = -pthread
 
 EXEC = contador
@@ -35,7 +38,13 @@ workers.o: workers.c workers.h floodfill.h matriz.h
 run: $(EXEC)
 	./$(EXEC) "$(ARQ)" $(WORKERS)
 
+test: $(EXEC)
+	sh tests/rodar_testes.sh ./$(EXEC)
+
+bench: $(EXEC)
+	sh tests/medir.sh ./$(EXEC)
+
 clean:
 	rm -f $(OBJS) $(EXEC) $(EXEC).exe
 
-.PHONY: all run clean
+.PHONY: all run test bench clean

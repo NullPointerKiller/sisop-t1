@@ -1,0 +1,3 @@
+# scripts e Makefile sempre com LF, senao quebram no Linux
+*.sh text eol=lf
+Makefile text eol=lf
