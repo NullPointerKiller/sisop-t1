@@ -10,5 +10,5 @@ make run ARQ="matriz 5x5.txt" WORKERS=4 (Definir arquivo e quantidade de threads
 make clean
 ```
 
-### Gerador de matrizes
+## Gerador de matrizes
 O arquivo genMatriz.py gera matrizes de acordo com os parâmetros de tamanho passados. Utilizado para facilitar os testes com tamanhos diversificados.
