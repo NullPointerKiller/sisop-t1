@@ -4,7 +4,7 @@
 > **Professor:** Prof. Filipo Novo Mór  
 > **Instituição:** Pontifícia Universidade Católica do Rio Grande do Sul - Escola Politécnica  
 > **Repositório:** https://github.com/NullPointerKiller/sisop-t1
-> **Versão do relatório:** 1.1  
+> **Versão do relatório:** 2.0  
 > **Data:** 06/10/2026
 
 ## Identificação
@@ -527,35 +527,35 @@ O principal aprendizado foi que dividir o trabalho é a parte fácil, e o difíc
 
 | Campo | Informação |
 |---|---|
-| Plataforma | [YouTube / Vimeo] |
-| Link privado ou não listado | [INSERIR URL COMPLETA] |
-| Duração | [MM:SS - máximo de 10 minutos] |
-| Privacidade | [Não listado / privado compartilhado com o professor / protegido por senha] |
-| Senha, se aplicável | [PREENCHER ou `Não se aplica`] |
-| Data da última verificação do acesso | [DD/MM/AAAA] |
+| Plataforma | [YouTube] |
+| Link privado ou não listado | [https://youtu.be/ubhQiJ_sbMk?is=Cgz_QTOHBpmfTBxY] |
+| Duração | [08:22] |
+| Privacidade | [Não listado] |
+| Senha, se aplicável | [`Não se aplica`] |
+| Data da última verificação do acesso | [06/10/2026] |
 
 ### 13.1 Conteúdo do vídeo
 
-- [ ] Problema e estratégia escolhida.
-- [ ] Implementação sequencial e referência de correção.
-- [ ] Decomposição, processos/threads e sincronização.
-- [ ] Consolidação de objetos que atravessam regiões.
-- [ ] Demonstração executável.
-- [ ] Testes obrigatórios e adicionais.
-- [ ] Resultados de desempenho.
-- [ ] Conclusões.
-- [ ] Participação de ambos os integrantes, quando o trabalho for em dupla.
+- [x] Problema e estratégia escolhida.
+- [x] Implementação sequencial e referência de correção.
+- [x] Decomposição, processos/threads e sincronização.
+- [x] Consolidação de objetos que atravessam regiões.
+- [x] Demonstração executável.
+- [x] Testes obrigatórios e adicionais.
+- [x] Resultados de desempenho.
+- [x] Conclusões.
+- [x] Participação de ambos os integrantes, quando o trabalho for em dupla.
 
 ## 14. Contribuições dos integrantes
 
 | Atividade | Integrante 1 | Integrante 2 | Evidência/observação |
 |---|---|---|---|
-| Projeto da solução sequencial | [PREENCHER] | [PREENCHER] | Commits `a19e8ba`, `41699d6`, `a5a230d` |
-| Projeto da solução paralela | [PREENCHER] | [PREENCHER] | Commits `f519ce6`, `e05df56`, `a5a230d` |
-| Sincronização/comunicação | [PREENCHER] | [PREENCHER] | Commits `e05df56`, `a5a230d` |
-| Consolidação | [PREENCHER] | [PREENCHER] | Commits `e05df56`, `a5a230d` |
-| Testes e medições | [PREENCHER] | [PREENCHER] | `genMatriz.py` (`d625c69`), `tests/` e `results/` (`a5a230d`) |
-| Documentação e apresentação | [PREENCHER] | [PREENCHER] | `README.md`, `RELATORIO_TECNICO.md`, `slides/` |
+| Projeto da solução sequencial | [Nathan Schmitt] | [Isadora Santos] | Commits `a19e8ba`, `41699d6`, `a5a230d` |
+| Projeto da solução paralela | [Nathan Schmitt] | [Jhone Salvador] | Commits `f519ce6`, `e05df56`, `a5a230d` |
+| Sincronização/comunicação | [Nathan Schmitt] | [Jhone Salvador] | Commits `e05df56`, `a5a230d` |
+| Consolidação | [Nathan Schmitt] | [Jhone Salvador] | Commits `e05df56`, `a5a230d` |
+| Testes e medições | [Nathan Schmitt] | [] | `genMatriz.py` (`d625c69`), `tests/` e `results/` (`a5a230d`) |
+| Documentação e apresentação | [Isadora Santos] | [Nathan Schmitt] | `README.md`, `RELATORIO_TECNICO.md`, `slides/` |
 
 Todos os integrantes declaram compreender integralmente o código, as estruturas de dados, a divisão do trabalho, a sincronização, a comunicação, a consolidação e os resultados apresentados.
 
@@ -603,8 +603,8 @@ Todos os integrantes declaram compreender integralmente o código, as estruturas
 - [x] O `Makefile` ou as instruções equivalentes permitem compilação reproduzível.
 - [x] As matrizes de teste e seus resultados estão incluídos.
 - [x] A análise de desempenho está incluída.
-- [ ] Os slides estão em `slides/apresentacao.pdf`. *(exportar o PDF do `slides/apresentacao.pptx`)*
-- [ ] O link do vídeo está acessível e o vídeo tem até 10 minutos.
+- [x] Os slides estão em `slides/apresentacao.pdf`.
+- [x] O link do vídeo está acessível e o vídeo tem até 10 minutos.
 - [x] Ferramentas, referências, bibliotecas e códigos externos foram identificados.
 - [x] O hash do commit avaliado foi registrado neste relatório.
 
